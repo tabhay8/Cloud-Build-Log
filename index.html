@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cloud Build Log — Azure engineering projects &amp; Azure Portfolio</title>
+<meta name="description" content="Azure cloud projects: Static Web Apps, Container Apps, Terraform, and production-grade CI/CD." />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<a class="skip-link" href="#projects">Skip to projects</a>
+
+<div class="aurora" aria-hidden="true"><span></span><span></span><span></span></div>
+
+<header class="site-header">
+  <div class="shell header-inner">
+    <a class="brand" href="#top"><span class="brand-dot"></span> Cloud Build Log</a>
+    <nav class="site-nav">
+      <a href="#projects">Projects</a>
+      <a href="#stack">Stack</a>
+      <button class="icon-btn" id="themeToggle" type="button" aria-label="Toggle colour theme" title="Toggle theme">◐</button>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="shell hero">
+    <div>
+      <span class="eyebrow">Azure · Containers · Infrastructure as Code</span>
+      <h1>Building cloud systems that <span class="grad">run in production</span>.</h1>
+      <p class="lede">
+        A portfolio that is also the workload. The site is served from Azure Static Web Apps,
+        the API runs as a container on Azure Container Apps, project data lives in Azure SQL,
+        and every resource is defined in Terraform with private networking and managed identity.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#projects">Browse projects →</a>
+        <a class="btn btn-ghost" href="#stack">How it is built</a>
+      </div>
+    </div>
+
+    <aside class="arch-card" aria-label="Live architecture">
+      <h2>Request path</h2>
+      <p class="sub">What happens when this page loads</p>
+      <div class="arch-flow">
+        <div class="arch-node">Browser <span class="tag">you</span></div>
+        <div class="arch-arrow">↓</div>
+        <div class="arch-node">Static Web Apps <span class="tag">frontend</span></div>
+        <div class="arch-arrow">↓</div>
+        <div class="arch-node">Container Apps <span class="tag">/api</span></div>
+        <div class="arch-arrow">↓</div>
+        <div class="arch-node">Azure SQL <span class="tag">private</span></div>
+      </div>
+      <div style="margin-top:18px">
+        <div class="status-strip">
+          <span class="dot" id="apiDot"></span>
+          <span id="apiStatusText">Checking API…</span>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <section class="shell section" id="projects">
+    <div class="section-head">
+      <div>
+        <h2>Projects</h2>
+        <p>Loaded live from the API. Filter by technology or search across titles and descriptions.</p>
+      </div>
+      <button class="btn btn-ghost" id="refreshBtn" type="button">↻ Refresh</button>
+    </div>
+
+    <div class="toolbar">
+      <div class="search-wrap">
+        <input id="searchInput" type="search" placeholder="Search projects…" aria-label="Search projects" autocomplete="off" />
+      </div>
+      <div class="chips" id="tagChips" role="group" aria-label="Filter by tag"></div>
+      <span class="result-count" id="resultCount" aria-live="polite"></span>
+    </div>
+
+    <div class="grid" id="projectGrid" aria-busy="true"></div>
+  </section>
+
+  <section class="shell section" id="stack">
+    <div class="section-head">
+      <div>
+        <h2>How it is built</h2>
+        <p>Each layer was built local-first, tested with Docker, then deployed through CI/CD.</p>
+      </div>
+    </div>
+    <div class="grid">
+      <article class="card"><div class="card-body">
+        <h3>Frontend</h3>
+        <p>Static site on Azure Static Web Apps with global HTTPS delivery, per-pull-request preview environments, and no server to keep warm.</p>
+        <div class="tag-row"><span class="tag">Static Web Apps</span><span class="tag">CDN</span></div>
+      </div></article>
+      <article class="card"><div class="card-body">
+        <h3>API</h3>
+        <p>Express API in a multi-stage Docker image on Azure Container Apps. Health and readiness probes, structured JSON logs, request IDs, and graceful shutdown.</p>
+        <div class="tag-row"><span class="tag">Container Apps</span><span class="tag">Docker</span><span class="tag">ACR</span></div>
+      </div></article>
+      <article class="card"><div class="card-body">
+        <h3>Data</h3>
+        <p>Azure SQL holds project metadata behind a private endpoint. Connection retry with exponential backoff absorbs serverless resume delays.</p>
+        <div class="tag-row"><span class="tag">Azure SQL</span><span class="tag">Private Link</span></div>
+      </div></article>
+      <article class="card"><div class="card-body">
+        <h3>Platform</h3>
+        <p>Terraform defines every resource with remote state. Managed identity replaces stored passwords, and Key Vault holds the remaining secrets.</p>
+        <div class="tag-row"><span class="tag">Terraform</span><span class="tag">Key Vault</span><span class="tag">Entra ID</span></div>
+      </div></article>
+      <article class="card"><div class="card-body">
+        <h3>Operations</h3>
+        <p>Application Insights traces requests and SQL dependencies; Container Apps logs stream to Log Analytics with alerts on failures and latency.</p>
+        <div class="tag-row"><span class="tag">App Insights</span><span class="tag">Log Analytics</span></div>
+      </div></article>
+      <article class="card"><div class="card-body">
+        <h3>Delivery</h3>
+        <p>Pull requests run build validation, then a merge builds the image, pushes to the registry, and rolls out a new revision with rollback available.</p>
+        <div class="tag-row"><span class="tag">GitHub Actions</span><span class="tag">Azure DevOps</span></div>
+      </div></article>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="shell footer-inner">
+    <span>Built on Azure — Static Web Apps, Container Apps, Terraform.</span>
+    <span id="buildMeta"></span>
+  </div>
+</footer>
+
+<script src="config.js"></script>
+<script src="projects.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
