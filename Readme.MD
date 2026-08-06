@@ -1,57 +1,87 @@
-# Cloud Build Log
+# Cloud Build Log — local-first Azure stack
 
-A portfolio site that's also the workload — built to be deployed on Azure Static Web Apps,
-with project data eventually served by a containerized API on Azure Container Apps backed
-by Azure SQL. Right now the frontend is static HTML/CSS/JS with hardcoded project data as
-a fallback while the API is being built.
+Version 2 of the portfolio workload. Everything runs on your machine first; Azure comes later.
 
-**Live site:** _add your Azure Static Web Apps URL here once deployed_
+## What is new in v2
 
-## Structure
+**Frontend** — full-viewport responsive layout, dark/light theme, live search and tag
+filtering, skeleton loading states, an API status indicator, and an architecture panel.
+
+**API** — fail-fast config validation, structured JSON logs with request IDs, split
+`/health` (liveness) and `/ready` (readiness) probes, SQL retry with exponential backoff,
+connection pooling, graceful shutdown, and optional Application Insights.
+
+**Platform** — Terraform foundation with remote state, central naming module, and a
+secrets policy that keeps credentials out of code and state.
+
+## Layout
 
 ```
-.
-├── index.html        # Markup
-├── styles.css         # All styling (theming via CSS variables, light/dark mode)
-├── config.js           # Runtime config (API base URL, timeouts, retries)
-├── projects.js         # Hardcoded project data — used as a fallback until the API is live
-├── app.js               # Fetches /api/projects, falls back to projects.js, handles search/filter/render
-└── images/               # Project screenshots referenced by projects.js
+api/          Express API (src/config, src/db, src/routes, server.js)
+web/          Static frontend (index.html, styles.css, app.js, config.js)
+db/           init.sql - schema plus seed rows
+infra/        Terraform: bootstrap/, envs/dev/, modules/naming/
+scripts/      init-local-env.sh
 ```
 
-## How data loading works
-
-`app.js` tries `GET {API_BASE}/api/projects`. If that fails (no API deployed yet, network
-error, etc.) it falls back to the hardcoded array in `projects.js` and shows a
-"Showing saved data - live API not connected yet" status. Once a real API exists, set
-`API_BASE` in `config.js` to point at it — no other code changes needed, the data shape
-already matches.
-
-## Local development
-
-No build step. Just serve the folder statically, e.g.:
+## Run it locally
 
 ```bash
-npx serve .
-# or
-python3 -m http.server 8080
+bash scripts/init-local-env.sh   # copies the .env templates
+# edit .env and api/.env, replacing every <placeholder> with your own values
+docker compose up --build
 ```
 
-Then open `http://localhost:8080` (or whichever port is printed).
+Then open:
 
-## Deployment
+| URL | What it is |
+|---|---|
+| http://localhost:8080 | the portfolio site |
+| http://localhost:3000/api/projects | project data as JSON |
+| http://localhost:3000/health | liveness |
+| http://localhost:3000/ready | readiness including SQL |
 
-Deployed via **Azure Static Web Apps**, connected directly to this GitHub repo. Every push
-to `main` triggers a GitHub Actions build/deploy automatically (workflow file added under
-`.github/workflows/` once the Static Web App resource is created in Azure).
+Run the API without Docker:
 
-- App location: `/`
-- Output location: _(empty — no build step)_
-- Api location: _(empty for now — will point at the Container Apps API later)_
+```bash
+cd api && npm install && npm start
+npm test          # config unit tests
+```
 
-## Roadmap
+## Secrets policy
 
-- [ ] Stand up the Container Apps API and Azure SQL database
-- [ ] Point `config.js` at the live API
-- [ ] Wire up CI for the API (build → push image to ACR → new Container Apps revision)
-- [ ] Terraform for all of the above
+No credentials appear in any tracked file - not in compose, not in the Terraform, not in
+the tests. Every credential is a `<placeholder>` in `.env.example` and `api/.env.example`;
+the real `.env` files are git-ignored. Compose references secrets as `${VAR:?}` so it fails
+fast rather than falling back to a default. Usernames are variables too, so no account name
+is baked in. In Azure, set `SQL_USE_MANAGED_IDENTITY=true` and leave `SQL_USER` and
+`SQL_PASSWORD` empty so no password exists at all.
+
+## API contract
+
+`GET /api/projects?limit=50&tag=Azure` returns:
+
+```json
+[{ "id": 1, "title": "...", "description": "...", "tags": "Azure,Terraform",
+   "imageUrl": null, "repoUrl": "https://...", "createdAt": "2026-07-21T00:00:00Z" }]
+```
+
+Returns `503` with an error body when the data source is unreachable, which the frontend
+retries automatically.
+
+## Pointing the frontend at a different API
+
+`web/config.js` sets `API_BASE` at runtime — no rebuild needed. Empty means same-origin;
+set it to the Container App URL for cross-origin testing, and add that origin to
+`ALLOWED_ORIGINS` on the API.
+
+## Terraform
+
+```bash
+cd infra/bootstrap && terraform init && terraform apply   # once: creates the state store
+# paste the backend_snippet output into infra/envs/dev/providers.tf
+cd ../envs/dev && terraform init && terraform plan
+```
+
+The dev environment currently creates the resource group and naming foundation. Network,
+observability, data, and container hosting modules follow in later phases.
