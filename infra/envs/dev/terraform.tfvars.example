@@ -1,0 +1,9 @@
+# Copy to terraform.tfvars (git-ignored) and adjust.
+# Do NOT put passwords, keys, or connection strings here.
+
+project     = "portfolio"
+environment = "dev"
+location    = "centralus"
+
+# Your Entra ID object ID: az ad signed-in-user show --query id -o tsv
+sql_admin_object_id = ""

@@ -1,0 +1,46 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+*.code-workspace
+.idea/
+
+# Azure Static Web Apps local build output (created by `swa build`/`swa start`)
+.swa/
+
+# Logs
+*.log
+
+# Env files (add real API URLs / secrets here later, never commit them)
+.env
+.env.local
+
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+
+# Secrets - never commit
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+*.pem
+*.key
+*.pfx
+*.publishsettings
+
+# Variable files may contain secrets - keep examples only
+*.tfvars
+*.tfvars.json
+!*.tfvars.example
+
+# Keep the lock file - it pins provider versions
+!.terraform.lock.hcl
