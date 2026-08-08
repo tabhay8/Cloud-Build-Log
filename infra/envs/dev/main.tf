@@ -30,3 +30,11 @@ resource "azurerm_static_web_app" "site" {
     ignore_changes = [repository_branch, repository_url]
   }
 }
+
+module "network" {
+  source              = "../../modules/network"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = var.location
+  naming_prefix       = module.naming.prefix
+  tags                = merge(var.tags, { environment = var.environment })
+}
