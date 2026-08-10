@@ -38,3 +38,11 @@ module "network" {
   naming_prefix       = module.naming.prefix
   tags                = merge(var.tags, { environment = var.environment })
 }
+
+module "observability" {
+  source              = "../../modules/observability"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = var.location
+  naming_prefix       = module.naming.prefix
+  tags                = merge(var.tags, { environment = var.environment })
+}
