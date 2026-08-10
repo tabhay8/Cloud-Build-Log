@@ -30,3 +30,14 @@ variable "tags" {
     workload  = "cloud-build-log"
   }
 }
+
+variable "client_ip_address" {
+  type    = string
+  default = ""
+}
+
+variable "data_public_access_enabled" {
+  type        = bool
+  description = "Flip to false after loading the schema."
+  default     = false
+}
