@@ -17,3 +17,8 @@ output "static_web_app_api_key" {
 
 output "vnet_name"     { value = module.network.vnet_name }
 output "aca_subnet_id" { value = module.network.aca_subnet_id }
+
+
+output "log_analytics_workspace_name" {
+  value = module.observability.log_analytics_workspace_name
+}
