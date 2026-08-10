@@ -46,3 +46,16 @@ module "observability" {
   naming_prefix       = module.naming.prefix
   tags                = merge(var.tags, { environment = var.environment })
 }
+
+module "data" {
+  source                         = "../../modules/data"
+  resource_group_name            = azurerm_resource_group.main.name
+  location                       = var.location
+  naming_prefix                  = module.naming.prefix
+  tags                           = merge(var.tags, { environment = var.environment })
+  private_endpoint_subnet_id     = module.network.private_endpoint_subnet_id
+  private_dns_zone_ids           = module.network.private_dns_zone_ids
+  sql_admin_object_id            = var.sql_admin_object_id
+  client_ip_address              = var.client_ip_address
+  public_access_enabled          = var.data_public_access_enabled
+}
