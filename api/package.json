@@ -1,0 +1,23 @@
+{
+  "name": "projects-api",
+  "version": "2.0.0",
+  "description": "Projects API v2 - container-first, local-first",
+  "main": "server.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "@azure/identity": "^4.4.1",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "mssql": "^11.0.1"
+  },
+  "optionalDependencies": {
+    "@azure/monitor-opentelemetry": "^1.8.0"
+  }
+}

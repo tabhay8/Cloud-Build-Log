@@ -1,0 +1,49 @@
+# Secrets are NEVER stored in this file.
+# Compose reads every credential from a local .env (git-ignored). Create it with:
+#   bash scripts/init-local-env.sh
+# The ":?" suffix makes compose fail fast if a value is unset, so nothing
+# silently falls back to a default credential.
+
+services:
+  sql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: portfolio-sql
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD:?set MSSQL_SA_PASSWORD in .env}
+      MSSQL_PID: "Developer"
+      SQL_ADMIN_USER: ${SQL_ADMIN_USER:?set SQL_ADMIN_USER in .env}
+    ports:
+      - "127.0.0.1:1433:1433"
+    volumes:
+      - sqldata:/var/opt/mssql
+      - ./db:/scripts:ro
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U \"$$SQL_ADMIN_USER\" -P \"$$MSSQL_SA_PASSWORD\" -C -Q 'SELECT 1' -d master || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 30s
+
+  api:
+    build: ./api
+    container_name: portfolio-api
+    depends_on:
+      sql:
+        condition: service_healthy
+    environment:
+      NODE_ENV: development
+      PORT: "3000"
+      LOG_LEVEL: debug
+      ALLOWED_ORIGINS: "http://localhost:8080"
+      SQL_SERVER: sql
+      SQL_DATABASE: portfolio
+      SQL_USER: ${SQL_ADMIN_USER:?set SQL_ADMIN_USER in .env}
+      SQL_PASSWORD: ${MSSQL_SA_PASSWORD:?set MSSQL_SA_PASSWORD in .env}
+      SQL_ENCRYPT: "true"
+      SQL_TRUST_SERVER_CERTIFICATE: "true"
+    ports:
+      - "127.0.0.1:3000:3000"
+
+volumes:
+  sqldata:
