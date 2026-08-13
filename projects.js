@@ -1,7 +1,17 @@
-// Cloud Build Log — project data (v1: hardcoded)
-// Replaced by fetch() to /api/projects later. Field names already match
-// the future API contract, so the swap is a one-line change.
+// Cloud Build Log — project data (fallback only)
+// The site fetches /api/projects first; this array renders only if that fails.
+// Field names match the API contract exactly, so both paths render identically.
 window.FALLBACK_PROJECTS = [
+  {
+    id: "3",
+    title: "Cloud Build Log",
+    description:
+      "This site. Static frontend on Azure Static Web Apps, containerised API on Container Apps, private Azure SQL, all defined in Terraform with remote state and private endpoints.",
+    tags: "Terraform,Container Apps,Azure SQL,CI/CD",
+    badge: "Live · 2026",
+    createdAt: "2026-08-13",
+    imageUrl: "images/cloudbuildlog.jpg"
+  },
   {
     id: "1",
     title: "AKS with Terraform",
