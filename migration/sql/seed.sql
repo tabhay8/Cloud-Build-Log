@@ -1,0 +1,48 @@
+-- Seed data for dbo.Projects. Moved out of db/init.sql, which now creates the
+-- schema and nothing else.
+--
+-- Guarded per title rather than "if the table is empty". The all-or-nothing
+-- form silently skips every new project once a single row exists, which is the
+-- wrong behaviour for a job that reruns on every deployment.
+--
+-- Id is IDENTITY(1,1), so it is never supplied.
+-- CreatedAt is fixed, not SYSUTCDATETIME(): the front end orders by it, and a
+-- value that changes per run makes ordering depend on when a deployment ran.
+
+SET NOCOUNT ON;
+
+IF NOT EXISTS (SELECT 1 FROM dbo.Projects WHERE Title = N'Cloud Build Log')
+INSERT INTO dbo.Projects (Title, Description, Tags, Badge, ImageUrl, CreatedAt)
+VALUES (
+    N'Cloud Build Log',
+    N'This site. Static frontend on Azure Static Web Apps, containerised API on Container Apps, private Azure SQL, all defined in Terraform with remote state and private endpoints.',
+    N'Terraform,Container Apps,Azure SQL,CI/CD',
+    N'Live - 2026',
+    N'images/cloudbuildlog.jpg',
+    '2026-08-01T00:00:00'
+);
+GO
+
+IF NOT EXISTS (SELECT 1 FROM dbo.Projects WHERE Title = N'AKS with Terraform')
+INSERT INTO dbo.Projects (Title, Description, Tags, Badge, ImageUrl, CreatedAt)
+VALUES (
+    N'AKS with Terraform',
+    N'Provisioning Azure Kubernetes Service clusters via Terraform and Azure DevOps pipelines - practicing container orchestration, Helm deployments, and secure ingress.',
+    N'AKS,Terraform,Azure DevOps,Helm',
+    N'In progress - 2026',
+    N'images/aks.png',
+    '2026-07-22T17:08:12'
+);
+GO
+
+IF NOT EXISTS (SELECT 1 FROM dbo.Projects WHERE Title = N'Movie Booking Website')
+INSERT INTO dbo.Projects (Title, Description, Tags, Badge, ImageUrl, CreatedAt)
+VALUES (
+    N'Movie Booking Website',
+    N'Full-stack movie booking site built with the .NET Framework and C#, with an integrated database for movie data and images. Deployed on Azure for high availability and scalability, end to end.',
+    N'.NET,C#,Azure,SQL',
+    N'Capstone - 2023',
+    N'images/movie.png',
+    '2023-06-01T00:00:00'
+);
+GO
