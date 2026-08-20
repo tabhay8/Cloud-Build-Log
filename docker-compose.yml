@@ -45,5 +45,21 @@ services:
     ports:
       - "127.0.0.1:3000:3000"
 
+  migrate:
+    build:
+      context: .
+      dockerfile: migration/Dockerfile
+    profiles: ["tools"]
+    depends_on:
+      - sql
+    environment:
+      SQL_SERVER: sql
+      SQL_DATABASE: ${SQL_DATABASE:-portfolio}
+      SQL_USE_MANAGED_IDENTITY: "false"
+      SQL_ADMIN_USER: ${SQL_ADMIN_USER}
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+      # optional: proves the SID conversion without needing Azure
+      API_IDENTITY_CLIENT_ID: ${API_IDENTITY_CLIENT_ID:-}
+
 volumes:
   sqldata:
