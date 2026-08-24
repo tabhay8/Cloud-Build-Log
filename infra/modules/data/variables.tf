@@ -41,3 +41,7 @@ variable "purge_protection_enabled" {
   description = "Blocks permanent deletion for 90 days. Recommended in production, awkward in a lab."
   default     = false
 }
+variable "sql_admin_group_object_id" {
+  type        = string
+  description = "Object id of sg-cbl-sql-admins"
+}

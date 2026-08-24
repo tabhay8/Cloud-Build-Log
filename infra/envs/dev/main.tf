@@ -58,4 +58,5 @@ module "data" {
   sql_admin_object_id            = var.sql_admin_object_id
   client_ip_address              = var.client_ip_address
   public_access_enabled          = var.data_public_access_enabled
+  sql_admin_group_object_id = var.sql_admin_group_object_id
 }

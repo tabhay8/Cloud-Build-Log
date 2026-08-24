@@ -3,11 +3,12 @@
 # The root context is what lets the image copy db/init.sql, so the job applies
 # the same schema file the local SQL container does. One schema, one source.
 
-FROM mcr.microsoft.com/cbl-mariner/base/nodejs:18
+FROM node:22-alpine
 WORKDIR /app
 
 COPY migration/package.json migration/package-lock.json* ./
-RUN npm install --omit=dev
+# RUN npm install --omit=dev
+RUN npm ci --omit=dev
 
 COPY migration/migrate.js ./migrate.js
 COPY migration/sql/seed.sql ./sql/seed.sql

@@ -30,6 +30,10 @@ resource "azurerm_subnet" "private_endpoints" {
   virtual_network_name              = azurerm_virtual_network.main.name
   address_prefixes                  = var.pe_subnet_prefix
   private_endpoint_network_policies = "Disabled"
+
+  # Private endpoints are inbound only. Implicit outbound internet access is
+  # off, and the provider default would silently turn it back on.
+  default_outbound_access_enabled = false
 }
 
 # One zone per service. Empty for now - Phase 4 adds the A records.
