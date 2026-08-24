@@ -9,7 +9,6 @@
     "local": "node migrate.js"
   },
   "dependencies": {
-    "@azure/identity": "^4.4.1",
     "mssql": "^11.0.1"
   }
 }

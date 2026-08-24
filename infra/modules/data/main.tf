@@ -13,11 +13,18 @@ resource "azurerm_mssql_server" "main" {
 
   # Entra ID only - there is no SQL login or password to leak.
   azuread_administrator {
-    login_username              = var.sql_admin_login
-    object_id                   = var.sql_admin_object_id
+    login_username              = "sg-cbl-sql-admins"
+    object_id                   = var.sql_admin_group_object_id
     tenant_id                   = data.azurerm_client_config.current.tenant_id
     azuread_authentication_only = true
   }
+  # azuread_administrator {
+  #   login_username              = var.sql_admin_login
+  #   object_id                   = var.sql_admin_object_id
+  #   tenant_id                   = data.azurerm_client_config.current.tenant_id
+  #   azuread_authentication_only = true
+  # }
+  
 }
 
 # Temporary: lets you load the schema from your machine.

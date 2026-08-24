@@ -7,7 +7,8 @@ FROM mcr.microsoft.com/cbl-mariner/base/nodejs:18
 WORKDIR /app
 
 COPY migration/package.json migration/package-lock.json* ./
-RUN npm install --omit=dev
+# RUN npm install --omit=dev
+RUN npm ci --omit=dev
 
 COPY migration/migrate.js ./migrate.js
 COPY migration/sql/seed.sql ./sql/seed.sql
