@@ -193,8 +193,8 @@
       var media = p.imageUrl
         ? '<img src="' + escapeHtml(p.imageUrl) + '" alt="" loading="lazy" onerror="this.remove()" />'
         : '<div class="fallback">' + initial + "</div>";
-      var link = p.repoUrl
-        ? '<a class="card-link" href="' + escapeHtml(p.repoUrl) + '" target="_blank" rel="noopener noreferrer">' +
+      var link = p.link
+        ? '<a class="card-link" href="' + escapeHtml(p.link) + '" target="_blank" rel="noopener noreferrer">' +
           escapeHtml(p.title) + "</a>"
         : "";
 
