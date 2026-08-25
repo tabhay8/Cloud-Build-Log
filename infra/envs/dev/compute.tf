@@ -39,7 +39,10 @@ variable "migration_image" {
 }
 variable "cors_allowed_origins" {
   type    = list(string)
-  default = ["https://cloudbuild.domaincheck.store"]
+  default = [
+    "https://cloudbuild.domaincheck.store",
+    "https://red-rock-0f96aa510.7.azurestaticapps.net",
+  ]
 }
 variable "sql_admin_group_object_id" {
   type        = string
