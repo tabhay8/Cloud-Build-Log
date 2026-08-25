@@ -91,13 +91,13 @@
           }
 
           // Retries exhausted (or non-retryable error, e.g. 404 because there's no API yet).
-          if (Array.isArray(window.FALLBACK_PROJECTS)) {
-            state.projects = window.FALLBACK_PROJECTS;
-            setApiStatus("warm", "Showing saved data - live API not connected yet");
-            renderChips();
-            render();
-            return;
-          }
+          // if (Array.isArray(window.FALLBACK_PROJECTS)) {
+          //   state.projects = window.FALLBACK_PROJECTS;
+          //   setApiStatus("warm", "Showing saved data - live API not connected yet");
+          //   renderChips();
+          //   render();
+          //   return;
+          // }
 
           setApiStatus("down", "API unreachable");
           renderError(error);
