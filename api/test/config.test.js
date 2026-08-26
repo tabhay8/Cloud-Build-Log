@@ -63,8 +63,20 @@ test("allowed origins parse into a list", () => {
     SQL_DATABASE: "portfolio",
     SQL_USER: PLACEHOLDER_USER,
     SQL_PASSWORD: PLACEHOLDER_PASSWORD,
-    ALLOWED_ORIGINS: "http://localhost:8080, https://example.net"
+    CORS_ALLOWED_ORIGINS: "http://localhost:8080, https://example.net"
   });
+test("rejects empty allowlist outside development", () => {
+  assert.throws(
+    () => load({
+      NODE_ENV: "production",
+      SQL_SERVER: "s",
+      SQL_DATABASE: "d",
+      SQL_USE_MANAGED_IDENTITY: "true"
+    }),
+    /CORS_ALLOWED_ORIGINS/
+  );
+});
+
   assert.deepStrictEqual(config.allowedOrigins, [
     "http://localhost:8080",
     "https://example.net"
