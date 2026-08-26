@@ -73,7 +73,7 @@ retries automatically.
 
 `web/config.js` sets `API_BASE` at runtime — no rebuild needed. Empty means same-origin;
 set it to the Container App URL for cross-origin testing, and add that origin to
-`ALLOWED_ORIGINS` on the API.
+`CORS_ALLOWED_ORIGINS` on the API.
 
 ## Terraform
 

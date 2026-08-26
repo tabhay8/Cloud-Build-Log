@@ -25,8 +25,8 @@ function buildApp(config, db, logger, state) {
   const corsOptions = {
     origin(origin, callback) {
       if (!origin) return callback(null, true);
-      if (config.allowedOrigins.length === 0) return callback(null, true);
-      if (config.allowedOrigins.includes(origin)) return callback(null, true);
+      const candidate = origin.trim().replace(/\/+$/, "").toLowerCase();
+      if (config.allowedOrigins.includes(candidate)) return callback(null, true);
       logger.warn("CORS origin rejected", { origin });
       return callback(null, false);
     },

@@ -3,7 +3,7 @@
 function parseList(value) {
   return String(value || "")
     .split(",")
-    .map((item) => item.trim())
+    .map((item) => item.trim().replace(/\/+$/, "").toLowerCase())
     .filter(Boolean);
 }
 
@@ -24,7 +24,7 @@ function load(env = process.env) {
     env: env.NODE_ENV || "development",
     port: parseNumber(env.PORT, 3000),
     shutdownTimeoutMs: parseNumber(env.SHUTDOWN_TIMEOUT_MS, 10000),
-    allowedOrigins: parseList(env.ALLOWED_ORIGINS),
+    allowedOrigins: parseList(env.CORS_ALLOWED_ORIGINS),
     logLevel: env.LOG_LEVEL || "info",
     telemetryConnectionString: env.APPLICATIONINSIGHTS_CONNECTION_STRING || "",
     sql: {
@@ -51,6 +51,9 @@ function load(env = process.env) {
   if (!useManagedIdentity) {
     if (!config.sql.user) missing.push("SQL_USER");
     if (!config.sql.password) missing.push("SQL_PASSWORD");
+  }
+  if (config.env !== "development" && config.allowedOrigins.length === 0) {
+    missing.push("CORS_ALLOWED_ORIGINS");
   }
 
   if (missing.length > 0) {
