@@ -13,8 +13,8 @@ locals {
     westeurope    = "weu"
     canadacentral = "cac"
   }
-  loc    = lookup(local.location_short, var.location, substr(var.location, 0, 3))
-  prefix = "${var.project}-${var.environment}-${local.loc}"
+  loc     = lookup(local.location_short, var.location, substr(var.location, 0, 3))
+  prefix  = "${var.project}-${var.environment}-${local.loc}"
   compact = replace("${var.project}${var.environment}${local.loc}", "-", "")
 }
 

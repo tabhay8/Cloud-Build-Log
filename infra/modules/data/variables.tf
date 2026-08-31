@@ -1,7 +1,7 @@
 variable "resource_group_name" { type = string }
-variable "location"            { type = string }
-variable "naming_prefix"       { type = string }
-variable "tags"                { type = map(string) }
+variable "location" { type = string }
+variable "naming_prefix" { type = string }
+variable "tags" { type = map(string) }
 
 variable "private_endpoint_subnet_id" {
   type        = string

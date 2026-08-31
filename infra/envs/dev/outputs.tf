@@ -15,7 +15,7 @@ output "static_web_app_api_key" {
   sensitive = true
 }
 
-output "vnet_name"     { value = module.network.vnet_name }
+output "vnet_name" { value = module.network.vnet_name }
 output "aca_subnet_id" { value = module.network.aca_subnet_id }
 
 

@@ -8,7 +8,7 @@ terraform {
   }
 
   # Fill in after running infra/bootstrap. Uses Entra ID auth - no keys in code.
-    backend "azurerm" {
+  backend "azurerm" {
     resource_group_name  = "rg-cbl-tfstate"
     storage_account_name = "stcblej1x7k"
     container_name       = "tfstate"
