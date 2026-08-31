@@ -1,7 +1,7 @@
 variable "resource_group_name" { type = string }
-variable "location"            { type = string }
-variable "naming_prefix"       { type = string }
-variable "tags"                { type = map(string) }
+variable "location" { type = string }
+variable "naming_prefix" { type = string }
+variable "tags" { type = map(string) }
 
 variable "vnet_address_space" {
   type        = list(string)
@@ -29,4 +29,16 @@ variable "private_dns_zones" {
     "privatelink.vaultcore.azure.net",
     "privatelink.azurecr.io"
   ]
+}
+
+variable "sql_service_tag" {
+  type        = string
+  description = "Regional SQL service tag, e.g. Sql.CentralUS."
+  default     = "Sql.CentralUS"
+}
+
+variable "storage_service_tag" {
+  type        = string
+  description = "Regional Storage service tag, e.g. Storage.CentralUS."
+  default     = "Storage.CentralUS"
 }

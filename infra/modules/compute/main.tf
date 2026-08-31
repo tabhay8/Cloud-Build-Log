@@ -94,7 +94,7 @@ resource "azurerm_container_app" "api" {
   resource_group_name          = var.resource_group_name
   container_app_environment_id = azurerm_container_app_environment.this.id
   revision_mode                = "Single"
-  workload_profile_name = "Consumption"
+  workload_profile_name        = "Consumption"
   tags                         = var.tags
 
   identity {
@@ -211,7 +211,7 @@ resource "azurerm_container_app_job" "migration" {
   resource_group_name          = var.resource_group_name
   location                     = var.location
   container_app_environment_id = azurerm_container_app_environment.this.id
-  workload_profile_name = "Consumption"
+  workload_profile_name        = "Consumption"
   tags                         = var.tags
 
   replica_timeout_in_seconds = 900

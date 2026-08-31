@@ -38,7 +38,7 @@ variable "migration_image" {
   default = "mcr.microsoft.com/k8se/quickstart:latest"
 }
 variable "cors_allowed_origins" {
-  type    = list(string)
+  type = list(string)
   default = [
     "https://cloudbuild.domaincheck.store",
     "https://red-rock-0f96aa510.7.azurestaticapps.net",
