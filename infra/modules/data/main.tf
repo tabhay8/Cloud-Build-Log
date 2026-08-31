@@ -10,6 +10,11 @@ resource "azurerm_mssql_server" "main" {
   minimum_tls_version           = "1.2"
   public_network_access_enabled = var.public_access_enabled
   tags                          = var.tags
+  identity {
+    type = "SystemAssigned"
+  }
+
+  express_vulnerability_assessment_enabled = true
 
   # Entra ID only - there is no SQL login or password to leak.
   azuread_administrator {
