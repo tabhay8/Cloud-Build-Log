@@ -198,8 +198,16 @@ resource "azurerm_container_app" "api" {
 
   depends_on = [azurerm_role_assignment.api_acr_pull]
 
+  # SecurityControl: a policy sets this tag; Terraform would strip it.
+  # image: CI deploys new revisions on merge to main (.github/workflows/api.yml),
+  # so the running tag is owned by the pipeline, not by state. Check the live
+  # image with `az containerapp show`, not `terraform plan`.
+
   lifecycle {
-    ignore_changes = [tags["SecurityControl"]]
+    ignore_changes = [
+      tags["SecurityControl"],
+      template[0].container[0].image,      
+    ]
   }
 }
 
