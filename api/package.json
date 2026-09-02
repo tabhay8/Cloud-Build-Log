@@ -1,6 +1,6 @@
 {
   "name": "projects-api",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Projects API v2 - container-first, local-first",
   "main": "server.js",
   "engines": {
