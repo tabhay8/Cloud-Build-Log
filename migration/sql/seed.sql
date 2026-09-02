@@ -11,6 +11,19 @@
 
 SET NOCOUNT ON;
 
+IF NOT EXISTS (SELECT 1 FROM dbo.Projects WHERE Title = N'Hire Me, Hosted on Azure')
+INSERT INTO dbo.Projects (Title, Description, Tags, Badge, ImageUrl, CreatedAt, Link)
+VALUES (
+    N'Hire Me, Hosted on Azure',
+    N'A responsive resume-style portfolio built with plain HTML, CSS, and JavaScript, hosted on Azure Static Web Apps with a custom domain and HTTPS. Features a dark/light theme, scroll animations, and a projects gallery that loads from an API with an offline fallback mode.',
+    N'HTML,CSS,JavaScript,Azure Static Web Apps,GitHub Actions',
+    N'Live - 2026',
+    N'images/port.png',
+    '2026-07-01T00:00:00',
+    N'https://portfolio.domaincheck.store/'
+);
+GO
+
 IF NOT EXISTS (SELECT 1 FROM dbo.Projects WHERE Title = N'Cloud Build Log')
 INSERT INTO dbo.Projects (Title, Description, Tags, Badge, ImageUrl, CreatedAt, Link)
 VALUES (
@@ -50,18 +63,18 @@ VALUES (
 );
 GO
 
--- Links were omitted from the original seed. The inserts above are guarded on
--- Title, so they no longer fire - backfilling needs an explicit UPDATE. Guarded
--- on Link IS NULL so a row edited by hand later is not overwritten.
+-- -- Links were omitted from the original seed. The inserts above are guarded on
+-- -- Title, so they no longer fire - backfilling needs an explicit UPDATE. Guarded
+-- -- on Link IS NULL so a row edited by hand later is not overwritten.
 
-UPDATE dbo.Projects SET Link =  N'https://github.com/tabhay8/Cloud-Build-Log'
-WHERE Title = N'Cloud Build Log' AND Link IS NULL;
-GO
+-- UPDATE dbo.Projects SET Link =  N'https://github.com/tabhay8/Cloud-Build-Log'
+-- WHERE Title = N'Cloud Build Log' AND Link IS NULL;
+-- GO
 
-UPDATE dbo.Projects SET Link = N'https://github.com/tabhay8/azure-aks-kubernetes-masterclass'
-WHERE Title = N'AKS with Terraform' AND Link IS NULL;
-GO
+-- UPDATE dbo.Projects SET Link = N'https://github.com/tabhay8/azure-aks-kubernetes-masterclass'
+-- WHERE Title = N'AKS with Terraform' AND Link IS NULL;
+-- GO
 
-UPDATE dbo.Projects SET Link = N'https://github.com/tabhay8/capstone'
-WHERE Title = N'Movie Booking Website' AND Link IS NULL;
-GO
+-- UPDATE dbo.Projects SET Link = N'https://github.com/tabhay8/capstone'
+-- WHERE Title = N'Movie Booking Website' AND Link IS NULL;
+-- GO
