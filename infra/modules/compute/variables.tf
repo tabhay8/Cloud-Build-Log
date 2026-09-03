@@ -41,11 +41,11 @@ variable "sql_database_name" { type = string }
 # missing image.
 variable "api_image" {
   type    = string
-  default = "mcr.microsoft.com/k8se/quickstart:latest"
+  description = "Fully qualified API container image including tag."
 }
 variable "migration_image" {
   type    = string
-  default = "mcr.microsoft.com/k8se/quickstart:latest"
+  description = "Fully qualified migration container image including tag."
 }
 
 variable "cors_allowed_origins" { type = list(string) }

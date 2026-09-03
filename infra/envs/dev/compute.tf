@@ -31,11 +31,11 @@ module "compute" {
 
 variable "api_image" {
   type    = string
-  default = "mcr.microsoft.com/k8se/quickstart:latest"
+  description = "Fully qualified API container image including tag. No default: a missing value must fail, not deploy a placeholder."
 }
 variable "migration_image" {
   type    = string
-  default = "mcr.microsoft.com/k8se/quickstart:latest"
+  description = "Fully qualified migration container image including tag."
 }
 variable "cors_allowed_origins" {
   type = list(string)
