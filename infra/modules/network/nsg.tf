@@ -23,6 +23,7 @@ resource "azurerm_network_security_rule" "aca_out" {
     monitor  = { priority = 140, tag = "AzureMonitor", ports = ["443"] }
     storage  = { priority = 150, tag = var.storage_service_tag, ports = ["443"] }
     keyvault = { priority = 160, tag = "AzureKeyVault", ports = ["443"] }
+    frontdoor = { priority = 180, tag = "AzureFrontDoor.FirstParty", ports = ["443"] }  
   }
 
   name                        = "Allow-${each.key}-Outbound"
@@ -49,6 +50,56 @@ resource "azurerm_network_security_rule" "aca_dns" {
   destination_port_range      = "53"
   source_address_prefix       = "VirtualNetwork"
   destination_address_prefix  = "168.63.129.16"
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.aca.name
+}
+
+# Required by Container Apps, and the path to our own private endpoints:
+# SQL and Key Vault are reached at VNet-internal IPs, not via service tags.
+resource "azurerm_network_security_rule" "aca_vnet" {
+  name                        = "Allow-Vnet-Outbound"
+  priority                    = 190
+  direction                   = "Outbound"
+  access                      = "Allow"
+  protocol                    = "*"
+  source_port_range           = "*"
+  destination_port_range      = "*"
+  source_address_prefix       = "VirtualNetwork"
+  destination_address_prefix  = "VirtualNetwork"
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.aca.name
+}
+
+resource "azurerm_network_security_rule" "aca_dns_tcp" {
+  name                        = "Allow-AzureDNS-Tcp-Outbound"
+  priority                    = 200
+  direction                   = "Outbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "53"
+  source_address_prefix       = "VirtualNetwork"
+  destination_address_prefix  = "168.63.129.16"
+  resource_group_name         = var.resource_group_name
+  network_security_group_name = azurerm_network_security_group.aca.name
+}
+
+# The boundary. Everything above this is an explicit allow; anything else
+# leaving the Container Apps subnet is refused. Priority 4000 sits below every
+# allow rule and above Azure's default AllowInternetOutBound at 65001.
+#
+# If a new revision fails to start after this lands, suspect a missing allow -
+# delete this rule to restore service, then add the destination it needed.
+resource "azurerm_network_security_rule" "aca_deny_all" {
+  name                        = "Deny-All-Outbound"
+  priority                    = 4000
+  direction                   = "Outbound"
+  access                      = "Deny"
+  protocol                    = "*"
+  source_port_range           = "*"
+  destination_port_range      = "*"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
   resource_group_name         = var.resource_group_name
   network_security_group_name = azurerm_network_security_group.aca.name
 }
